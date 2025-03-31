@@ -1,23 +1,39 @@
 {
   "name": "jit-simulation-app",
   "version": "1.0.0",
-  "main": "index.ts",
+  "main": "expo-router/entry",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "lint": "biome check --write",
+    "format": "biome format --write"
   },
   "dependencies": {
-    "expo": "~52.0.37",
+    "@react-native-picker/picker": "2.9.0",
+    "@tamagui/config": "^1.125.22",
+    "@tanstack/react-query": "^5.67.2",
+    "expo": "^52.0.39",
+    "expo-constants": "~17.0.7",
+    "expo-file-system": "~18.0.11",
+    "expo-linking": "~7.0.5",
+    "expo-router": "~4.0.19",
+    "expo-sharing": "~13.0.1",
     "expo-status-bar": "~2.0.1",
     "react": "18.3.1",
-    "react-native": "0.76.7"
+    "react-native": "0.76.7",
+    "react-native-screens": "~4.4.0",
+    "tamagui": "^1.125.22",
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
-    "@babel/core": "^7.25.2",
+    "@babel/core": "^7.26.9",
+    "@biomejs/biome": "1.9.4",
     "@types/react": "~18.3.12",
+    "@types/react-query": "^1.2.9",
     "typescript": "^5.3.3"
   },
-  "private": true
+  "private": true,
+  "packageManager": "pnpm@9.5.0+sha256.dbdf5961c32909fb030595a9daa1dae720162e658609a8f92f2fa99835510ca5"
 }
