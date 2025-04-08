@@ -37,7 +37,7 @@ export default function ShoeScreen() {
   const [simulationParams, setSimulationParams] = useState<SimulationParams>({
     estoque_inicial: 95,
     estoque_seg_costura: 50,
-    tempo_simulacao: 480,
+    tempo_simulacao: 490,
     media_corte: 4.4,
     std_corte: 0.2,
     tempo_setup_corte: 0.3,
@@ -153,7 +153,7 @@ export default function ShoeScreen() {
               <Image source={require("../../assets/estoque.png")} style={styles.stock} />
             </Pressable>
             <Text style={{ fontWeight: 'bold', fontSize: 12 }}>Estoque Inicial</Text>
-            <Text style={{ fontSize: 12 }}>{simulationParams["estoque_inicial"]} unid</Text>
+            <Text style={{ fontSize: 12 }}>{simulationParams["estoque_inicial"]} un</Text>
           </View>
 
           {/* Esteira horizontal */}
@@ -162,10 +162,10 @@ export default function ShoeScreen() {
           {/* Máquina de corte */}
           <View style={{ flexDirection: "column", alignItems: "center" }}>
             <Text style={{ fontWeight: 'bold', fontSize: 12 }}>Máquina de Corte</Text>
-            <Text style={{ fontSize: 12 }}>Process: {simulationParams.media_corte} ± {simulationParams.std_corte} min</Text>
+            <Text style={{ fontSize: 12 }}>Process: {simulationParams.media_corte} ± {simulationParams.std_corte} min/un</Text>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Text style={{ fontSize: 12 }}>Setup: </Text>
-              <Text style={{ fontSize: 12 }}>{simulationParams["tempo_setup_corte"]} min</Text>
+              <Text style={{ fontSize: 12 }}>{simulationParams["tempo_setup_corte"]} min/un</Text>
             </View>
             <Pressable onPress={() => openMachineModal("tempo_setup_corte")}>
               <Image source={require("../../assets/maquina-corte.png")} style={styles.machine} />
@@ -185,10 +185,10 @@ export default function ShoeScreen() {
             </Pressable>
             <View style={{ flexDirection: "column", alignItems: "center" }}>
               <Text style={{ fontWeight: 'bold', fontSize: 12 }}>Máquina de Costura</Text>
-              <Text style={{ fontSize: 12 }}>Process: {simulationParams.media_costura} ± {simulationParams.std_costura} min</Text>
+              <Text style={{ fontSize: 12 }}>Process: {simulationParams.media_costura} ± {simulationParams.std_costura} min/un</Text>
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <Text style={{ fontSize: 12 }}>Setup: </Text>
-                <Text style={{ fontSize: 12 }}>{simulationParams["tempo_setup_costura"]} min</Text>
+                <Text style={{ fontSize: 12 }}>{simulationParams["tempo_setup_costura"]} min/un</Text>
               </View>
             </View>
           </View>
@@ -202,7 +202,7 @@ export default function ShoeScreen() {
               <Image source={require("../../assets/estoque.png")} style={styles.stock} />
             </Pressable>
             <Text style={{ fontWeight: 'bold', fontSize: 12, marginTop: 10 }}>Estoque Seg. Costura</Text>
-            <Text style={{ fontSize: 12 }}>{simulationParams["estoque_seg_costura"]} unid</Text>
+            <Text style={{ fontSize: 12 }}>{simulationParams["estoque_seg_costura"]} un</Text>
           </View>
         </View>
       </View>
@@ -211,7 +211,7 @@ export default function ShoeScreen() {
       <Modal visible={modalVisible} transparent animationType="slide">
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>{modalType} / und</Text>
+            <Text style={styles.modalTitle}>{modalType} - un</Text>
             <TextInput
               style={styles.input}
               placeholder="Digite o valor"
@@ -237,7 +237,7 @@ export default function ShoeScreen() {
       <Modal visible={machineModalVisible} transparent animationType="slide">
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text style={styles.machineModalTitle}>Configuração {modalMachineTitle} / min</Text>
+            <Text style={styles.machineModalTitle}>Configuração {modalMachineTitle} - min/un</Text>
 
             {/* Linha com os inputs */}
             <View style={styles.inputRow}>

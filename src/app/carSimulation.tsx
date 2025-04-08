@@ -146,7 +146,7 @@ export default function CarScreen() {
     }
   };
 
-  const modalTitle = modalType === "media_acabamento" ? `${modalType} / seg` : `${modalType} / und`;
+  const modalTitle = modalType === "media_acabamento" ? `${modalType} - s/un` : `${modalType} - un`;
   const modalMachineTitle = modalType === "tempo_setup_injetora" 
     ? "injetora" 
     : modalType === "tempo_setup_flamagem" 
@@ -168,7 +168,7 @@ export default function CarScreen() {
           {/* Estoque inicial */}
           <View style={{ alignItems: "center" }}>
             <Text style={{ fontWeight: 'bold', fontSize: 12 }}>Estoque Inicial</Text>
-            <Text style={{ fontSize: 12 }}>{simulationParams["estoque_inicial"]} unid</Text>
+            <Text style={{ fontSize: 12 }}>{simulationParams["estoque_inicial"]} un</Text>
             <Pressable onPress={() => openModal("estoque_inicial")}>
               <Image source={require("../../assets/estoque.png")} style={styles.stock} />
             </Pressable>
@@ -180,12 +180,12 @@ export default function CarScreen() {
           {/* Máquina de injetora */}
           <View style={{ flexDirection: "column", alignItems: "center" }}>
             <Text style={{ fontWeight: 'bold', fontSize: 12 }}>Injetora</Text>
-            <Text style={{ fontSize: 12 }}>Process: {simulationParams.media_injetora} s</Text>
-            <Text style={{ fontSize: 12 }}>std: {simulationParams.std_injetora} s
+            <Text style={{ fontSize: 12 }}>Process: {simulationParams.media_injetora} s/un</Text>
+            <Text style={{ fontSize: 12 }}>std: {simulationParams.std_injetora} s/un
             </Text>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Text style={{ fontSize: 12 }}>Setup: </Text>
-              <Text style={{ fontSize: 12 }}>{simulationParams["tempo_setup_injetora"]} s</Text>
+              <Text style={{ fontSize: 12 }}>{simulationParams["tempo_setup_injetora"]} s/un</Text>
             </View>
             <Pressable onPress={() => openMachineModal("tempo_setup_injetora")}>
               <Image source={require("../../assets/injetora.png")} style={styles.machine} />
@@ -198,7 +198,7 @@ export default function CarScreen() {
           {/* Acabamento */}
           <View style={{ alignItems: "center" }}>
             <Text style={{ fontWeight: 'bold', fontSize: 12, marginTop: 10 }}>Acabamento</Text>
-            <Text style={{ fontSize: 12 }}>{simulationParams["media_acabamento"]} s</Text>
+            <Text style={{ fontSize: 12 }}>{simulationParams["media_acabamento"]} s/un</Text>
             <Pressable onPress={() => openModal("media_acabamento")}>
               <Image source={require("../../assets/operador.png")} style={styles.operator} />
             </Pressable>
@@ -216,11 +216,11 @@ export default function CarScreen() {
               <Image source={require("../../assets/colagem.png")} style={styles.machine} />
             </Pressable>
             <Text style={{ fontWeight: 'bold', fontSize: 12 }}>Colagem</Text>
-            <Text style={{ fontSize: 12 }}>Process: {simulationParams.media_colagem} s</Text>
-            <Text style={{ fontSize: 12 }}>std: {simulationParams.std_colagem} s</Text>
+            <Text style={{ fontSize: 12 }}>Process: {simulationParams.media_colagem} s/un</Text>
+            <Text style={{ fontSize: 12 }}>std: {simulationParams.std_colagem} s/un</Text>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <Text style={{ fontSize: 12 }}>Setup: </Text>
-              <Text style={{ fontSize: 12 }}>{simulationParams["tempo_setup_colagem"]} s</Text>
+              <Text style={{ fontSize: 12 }}>{simulationParams["tempo_setup_colagem"]} s/un</Text>
             </View>
           </View>
 
@@ -234,11 +234,11 @@ export default function CarScreen() {
             </Pressable>
             <View style={{ flexDirection: "column", alignItems: "center" }}>
               <Text style={{ fontWeight: 'bold', fontSize: 12 }}>Flamagem</Text>
-              <Text style={{ fontSize: 12 }}>Process: {simulationParams.media_flamagem} s</Text>
-              <Text style={{ fontSize: 12 }}>std: {simulationParams.std_flamagem} s</Text>
+              <Text style={{ fontSize: 12 }}>Process: {simulationParams.media_flamagem} s/un</Text>
+              <Text style={{ fontSize: 12 }}>std: {simulationParams.std_flamagem} s/un</Text>
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <Text style={{ fontSize: 12 }}>Setup: </Text>
-                <Text style={{ fontSize: 12 }}>{simulationParams["tempo_setup_flamagem"]} s</Text>
+                <Text style={{ fontSize: 12 }}>{simulationParams["tempo_setup_flamagem"]} s/un</Text>
               </View>
             </View>
           </View>
@@ -252,7 +252,7 @@ export default function CarScreen() {
               <Image source={require("../../assets/estoque.png")} style={styles.stock} />
             </Pressable>
             <Text style={{ fontWeight: 'bold', fontSize: 12, marginTop: 10 }}>Est. Flamagem</Text>
-            <Text style={{ fontSize: 12 }}>{simulationParams["estoque_seg_flamagem"]} unid</Text>
+            <Text style={{ fontSize: 12 }}>{simulationParams["estoque_seg_flamagem"]} un</Text>
           </View>
         </View>
       </View>
@@ -288,7 +288,7 @@ export default function CarScreen() {
       <Modal visible={machineModalVisible} transparent animationType="slide">
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text style={styles.machineModalTitle}>Configuração {modalMachineTitle} / seg</Text>
+            <Text style={styles.machineModalTitle}>Configuração {modalMachineTitle} - s/un</Text>
 
             {/* Linha com os inputs */}
             <View style={styles.inputRow}>

@@ -111,17 +111,17 @@ export default function ResultShoePage() {
           <View style={styles.resultContainer}>
             <View style={styles.card}>
               <Text style={styles.cardTitle}>Quantidade de peças entraram no sistema:</Text>
-              <Text style={styles.cardValue}>{String(parsedData.entradas)}</Text>
+              <Text style={styles.cardValue}>{String(parsedData.entradas)} peças</Text>
             </View>
 
             <View style={styles.card}>
               <Text style={styles.cardTitle}>Quantidade de peças que saíram do sistema:</Text>
-              <Text style={styles.cardValue}>{String(parsedData.saidas)}</Text>
+              <Text style={styles.cardValue}>{String(parsedData.saidas)} peças</Text>
             </View>
 
             <View style={styles.card}>
               <Text style={styles.cardTitle}>Lead Time:</Text>
-              <Text style={styles.cardValue}>{formatNumber(parsedData.tempo_medio_sistema)} minutos</Text>
+              <Text style={styles.cardValue}>{formatNumber(parsedData.tempo_medio_sistema)} min/un</Text>
             </View>
 
             <View style={styles.card}>
