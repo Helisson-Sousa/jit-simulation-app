@@ -12,6 +12,7 @@ import {
 import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import { useSimulationShoe } from "../stores/simulationShoe";
 
 type SimulationParams = {
   "estoque_inicial": number;
@@ -34,17 +35,7 @@ export default function ShoeScreen() {
 
   const [modalType, setModalType] = useState<keyof SimulationParams | undefined>(undefined);
 
-  const [simulationParams, setSimulationParams] = useState<SimulationParams>({
-    estoque_inicial: 95,
-    estoque_seg_costura: 50,
-    tempo_simulacao: 490,
-    media_corte: 4.4,
-    std_corte: 0.2,
-    tempo_setup_corte: 0.3,
-    media_costura: 4.5,
-    std_costura: 0.3,
-    tempo_setup_costura: 0.2,
-  });
+  const { simulationParams, setSimulationParams } = useSimulationShoe();
   
   // Gerenciando todos os valores de input em um único estado
   const [inputValues, setInputValues] = useState({
@@ -86,6 +77,16 @@ export default function ShoeScreen() {
   };
 
   const handleSave = () => {
+    const hasInvalidValue = Object.values(inputValues).some(value => {
+      const stringValue = String(value).trim();
+      return stringValue === '' || isNaN(Number(stringValue));
+    });
+  
+    if (hasInvalidValue) {
+      alert("Todos os campos devem ser preenchidos com números válidos.");
+      return;
+    }
+
     if (modalType !== undefined) {
       const newSimulationParams = Object.entries(inputValues).reduce((acc, [key, value]) => {
         acc[key as keyof SimulationParams] = parseFloat(value);
@@ -217,10 +218,13 @@ export default function ShoeScreen() {
               placeholder="Digite o valor"
               keyboardType="numeric"
               value={inputValues[modalType as keyof typeof inputValues] || ''}
-              onChangeText={(value) => setInputValues((prev) => ({
-                ...prev,
-                [modalType || '']: value
-              }))}
+              onChangeText={(value) => {
+                const sanitized = value.replace(/[^0-9.]/g, '');
+                setInputValues((prev) => ({
+                  ...prev,
+                  [modalType || '']: sanitized
+                }));
+              }}
             />
             <View style={styles.modalButtonContainer}>
               <Pressable style={styles.modalButton} onPress={handleSave}>
@@ -247,10 +251,13 @@ export default function ShoeScreen() {
                 placeholder="Média"
                 keyboardType="numeric"
                 value={inputValues[modalMachineTitle === "Corte" ? "media_corte" : "media_costura"]}
-                onChangeText={(value) => setInputValues((prev) => ({
-                  ...prev,
-                  [modalMachineTitle === "Corte" ? "media_corte" : "media_costura"]: value
-                }))}
+                onChangeText={(value) => {
+                  const sanitized = value.replace(/[^0-9.]/g, '');
+                  setInputValues((prev) => ({
+                    ...prev,
+                    [modalMachineTitle === "Corte" ? "media_corte" : "media_costura"]: sanitized
+                  }));
+                }}
               />
             </View>
 
@@ -261,10 +268,13 @@ export default function ShoeScreen() {
                 placeholder="std"
                 keyboardType="numeric"
                 value={inputValues[modalMachineTitle === "Corte" ? "std_corte" : "std_costura"]}
-                onChangeText={(value) => setInputValues((prev) => ({
-                  ...prev,
-                  [modalMachineTitle === "Corte" ? "std_corte" : "std_costura"]: value
-                }))}
+                onChangeText={(value) => {
+                  const sanitized = value.replace(/[^0-9.]/g, '');
+                  setInputValues((prev) => ({
+                    ...prev,
+                    [modalMachineTitle === "Corte" ? "std_corte" : "std_costura"]: sanitized
+                  }));
+                }}
               />
             </View>
 
@@ -275,10 +285,13 @@ export default function ShoeScreen() {
                 placeholder="Setup"
                 keyboardType="numeric"
                 value={inputValues[modalMachineTitle === "Corte" ? "tempo_setup_corte" : "tempo_setup_costura"]}
-                onChangeText={(value) => setInputValues((prev) => ({
-                  ...prev,
-                  [modalMachineTitle === "Corte" ? "tempo_setup_corte" : "tempo_setup_costura"]: value
-                }))}
+                onChangeText={(value) => {
+                  const sanitized = value.replace(/[^0-9.]/g, '');
+                  setInputValues((prev) => ({
+                    ...prev,
+                    [modalMachineTitle === "Corte" ? "tempo_setup_corte" : "tempo_setup_costura"]: sanitized
+                  }));
+                }}
               />
             </View>
 

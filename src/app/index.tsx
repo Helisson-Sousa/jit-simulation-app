@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { usePathname } from "expo-router";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import ShoeScreen from "./shoeSimulation";
 import CarScreen from "./carSimulation";
 
@@ -11,30 +13,38 @@ const queryClient = new QueryClient({
 });
 
 export default function Index() {
-  const [selectedItem, setSelectedItem] = useState("Shoe Factory");
+  const [selectedItem, setSelectedItem] = useState<string | null>(null);
   const pathname = usePathname();
 
-  const handleImageClick = (imageName: string) => {
+  const isResultPage = pathname === "/result";
+
+  useEffect(() => {
+    // Recupera seleção anterior ao carregar a tela
+    AsyncStorage.getItem("selectedItem").then((value) => {
+      if (value) setSelectedItem(value);
+      else setSelectedItem("Shoe Factory"); // fallback
+    });
+  }, []);
+
+  const handleImageClick = async (imageName: string) => {
+    await AsyncStorage.setItem("selectedItem", imageName);
     setSelectedItem(imageName);
   };
 
-  const isResultPage = pathname === "/result";
+  if (!selectedItem) return null; // Evita renderização antes de recuperar seleção
 
   return (
     <SafeAreaProvider style={styles.container}>
       <QueryClientProvider client={queryClient}>
+        {selectedItem === "Shoe Factory" ? <ShoeScreen /> : <CarScreen />}
 
-        {selectedItem === "Shoe Factory" ? <ShoeScreen /> : <CarScreen />} 
-
-        {/* Esconder a seleção se estivermos na ResultPage */}
         {!isResultPage && (
           <>
-            <View style={[styles.textContainer, isResultPage && { marginVertical: 5 }]}>
+            <View style={styles.textContainer}>
               <Text style={styles.title}>Escolha o Sistema Produtivo para simulação:</Text>
             </View>
 
             <View style={styles.bottomMenu}>
-              {/* Sapato - Seleção dinâmica */}
               <TouchableOpacity
                 onPress={() => handleImageClick("Shoe Factory")}
                 style={[
@@ -45,7 +55,6 @@ export default function Index() {
                 <Image source={require("../../assets/shoe-factory.png")} style={styles.image} />
               </TouchableOpacity>
 
-              {/* Carro - Seleção dinâmica */}
               <TouchableOpacity
                 onPress={() => handleImageClick("Car Factory")}
                 style={[
@@ -57,7 +66,7 @@ export default function Index() {
               </TouchableOpacity>
             </View>
           </>
-        )} 
+        )}
       </QueryClientProvider>
     </SafeAreaProvider>
   );

@@ -12,6 +12,7 @@ import {
 import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+import { useSimulationCar } from "../stores/simulationCar";
 
 type SimulationParams = {
   "estoque_inicial": number;
@@ -38,22 +39,8 @@ export default function CarScreen() {
 
   const [modalType, setModalType] = useState<keyof SimulationParams | undefined>(undefined);
 
-  const [simulationParams, setSimulationParams] = useState<SimulationParams>({
-    estoque_inicial: 100,
-    estoque_seg_flamagem: 50,
-    tempo_simulacao: 28800,
-    media_injetora: 44.08,
-    std_injetora: 0.87,
-    tempo_setup_injetora: 2.4,
-    media_flamagem: 34.8,
-    std_flamagem: 0.97,
-    tempo_setup_flamagem: 3.84,
-    media_colagem: 82.3,
-    std_colagem: 1.1,
-    tempo_setup_colagem: 3.06,
-    media_acabamento: 50,
-  });
- 
+  const { simulationParams, setSimulationParams } = useSimulationCar();
+
   // Gerenciando todos os valores de input em um único estado
   const [inputValues, setInputValues] = useState({
     media_injetora: simulationParams.media_injetora.toString(),
@@ -98,6 +85,16 @@ export default function CarScreen() {
   };
 
   const handleSave = () => {
+    const hasInvalidValue = Object.values(inputValues).some(value => {
+      const stringValue = String(value).trim();
+      return stringValue === '' || isNaN(Number(stringValue));
+    });
+  
+    if (hasInvalidValue) {
+      alert("Todos os campos devem ser preenchidos com números válidos.");
+      return;
+    }
+
     if (modalType !== undefined) {
       const newSimulationParams = Object.entries(inputValues).reduce((acc, [key, value]) => {
         acc[key as keyof SimulationParams] = parseFloat(value);
@@ -267,10 +264,13 @@ export default function CarScreen() {
               placeholder="Digite o valor"
               keyboardType="numeric"
               value={inputValues[modalType as keyof typeof inputValues] || ''}
-              onChangeText={(value) => setInputValues((prev) => ({
-                ...prev,
-                [modalType || '']: value
-              }))}
+              onChangeText={(value) => {
+                const sanitized = value.replace(/[^0-9.]/g, '');
+                setInputValues((prev) => ({
+                  ...prev,
+                  [modalType || '']: sanitized
+                }))
+              }}
               editable={modalType !== "estoque_inicial"}
             />
             <View style={styles.modalButtonContainer}>
@@ -298,10 +298,13 @@ export default function CarScreen() {
                 placeholder="Média"
                 keyboardType="numeric"
                 value={inputValues[modalMachineTitle === "injetora" ? "media_injetora" : (modalMachineTitle === "flamagem" ? "media_flamagem" : "media_colagem")]}
-                onChangeText={(value) => setInputValues((prev) => ({
-                  ...prev,
-                  [modalMachineTitle === "injetora" ? "media_injetora" : (modalMachineTitle === "flamagem" ? "media_flamagem" : "media_colagem")]: value
-                }))}
+                onChangeText={(value) => {
+                  const sanitized = value.replace(/[^0-9.]/g, '');
+                  setInputValues((prev) => ({
+                    ...prev,
+                    [modalMachineTitle === "injetora" ? "media_injetora" : (modalMachineTitle === "flamagem" ? "media_flamagem" : "media_colagem")]: sanitized
+                  }))
+                }}
               />
             </View>
 
@@ -312,10 +315,13 @@ export default function CarScreen() {
                 placeholder="std"
                 keyboardType="numeric"
                 value={inputValues[modalMachineTitle === "injetora" ? "std_injetora" : (modalMachineTitle === "flamagem" ? "std_flamagem" : "std_colagem")]}
-                onChangeText={(value) => setInputValues((prev) => ({
-                  ...prev,
-                  [modalMachineTitle === "injetora" ? "std_injetora" : (modalMachineTitle === "flamagem" ? "std_flamagem" : "std_colagem")]: value
-                }))}
+                onChangeText={(value) => {
+                  const sanitized = value.replace(/[^0-9.]/g, '');
+                  setInputValues((prev) => ({
+                    ...prev,
+                    [modalMachineTitle === "injetora" ? "std_injetora" : (modalMachineTitle === "flamagem" ? "std_flamagem" : "std_colagem")]: sanitized
+                  }))
+                }}
               />
             </View>
 
@@ -326,10 +332,13 @@ export default function CarScreen() {
                 placeholder="Setup"
                 keyboardType="numeric"
                 value={inputValues[modalMachineTitle === "injetora" ? "tempo_setup_injetora" : (modalMachineTitle === "flamagem" ? "tempo_setup_flamagem" : "tempo_setup_colagem")]}
-                onChangeText={(value) => setInputValues((prev) => ({
-                  ...prev,
-                  [modalMachineTitle === "injetora" ? "tempo_setup_injetora" : (modalMachineTitle === "flamagem" ? "tempo_setup_flamagem" : "tempo_setup_colagem")]: value
-                }))}
+                onChangeText={(value) => {
+                  const sanitized = value.replace(/[^0-9.]/g, '');
+                  setInputValues((prev) => ({
+                    ...prev,
+                    [modalMachineTitle === "injetora" ? "tempo_setup_injetora" : (modalMachineTitle === "flamagem" ? "tempo_setup_flamagem" : "tempo_setup_colagem")]: sanitized
+                  }))
+                }}
               />
             </View>
 

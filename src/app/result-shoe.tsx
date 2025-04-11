@@ -2,6 +2,7 @@ import { SafeAreaView, View, Text, StyleSheet, ScrollView, Pressable } from "rea
 import { useLocalSearchParams, router } from "expo-router";
 import * as Sharing from "expo-sharing";
 import * as FileSystem from "expo-file-system";
+import { Platform } from "react-native";
 
 // Definindo a interface para os dados esperados
 interface ResultData {
@@ -69,36 +70,58 @@ export default function ResultShoePage() {
   // Função para formatar os dados em uma forma legível
   const formatNumber = (value: number) => value.toFixed(2);
 
+  const flattenObject = (
+    obj: Record<string, unknown>,
+    prefix = ''
+  ): Record<string, string | number> => {
+    return Object.entries(obj).reduce((acc, [key, value]) => {
+      const newKey = prefix ? `${prefix}.${key}` : key;
+  
+      if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+        Object.assign(acc, flattenObject(value as Record<string, unknown>, newKey));
+      } else {
+        acc[newKey] = typeof value === 'number' ? value.toFixed(2) : String(value);
+      }
+  
+      return acc;
+    }, {} as Record<string, string | number>);
+  };
+  
   const handleExportCSV = async () => {
     try {
-      const csvHeader = Object.keys(parsedData).join(",");
-      const csvValues = Object.values(parsedData)
-        .map((value) => {
-          if (typeof value === "object" && value !== null) {
-            return `"${JSON.stringify(value).replace(/"/g, '""')}"`;
-          }
-          return `"${String(value)}"`;
-        })
-        .join(",");
-      const csvContent = `${csvHeader}\n${csvValues}`;
-
-      // Cria um arquivo temporário
-      const fileUri = `${FileSystem.documentDirectory}simulacao_${Date.now()}.csv`;
-      await FileSystem.writeAsStringAsync(fileUri, csvContent);
-
-      // Compartilha o arquivo
-      await Sharing.shareAsync(fileUri, {
-        mimeType: "text/csv",
-        dialogTitle: "Exportar Resultados",
-        UTI: "public.comma-separated-values-text",
-      });
-
-      // Remove o arquivo temporário após o uso
-      await FileSystem.deleteAsync(fileUri);
+      const flattened = flattenObject(parsedData as unknown as Record<string, unknown>);
+  
+      const headers = Object.keys(flattened).join(';'); // <-- alterado para ponto e vírgula
+      const values = Object.values(flattened).join(';'); // <-- alterado para ponto e vírgula
+  
+      const csvContent = `${headers}\n${values}`;
+  
+      if (Platform.OS === 'web') {
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `simulacao_${Date.now()}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } else {
+        const fileUri = `${FileSystem.documentDirectory}simulacao_${Date.now()}.csv`;
+        await FileSystem.writeAsStringAsync(fileUri, csvContent);
+        await Sharing.shareAsync(fileUri, {
+          mimeType: 'text/csv',
+          dialogTitle: 'Exportar Resultados',
+          UTI: 'public.comma-separated-values-text',
+        });
+        await FileSystem.deleteAsync(fileUri);
+      }
     } catch (error) {
-      console.error("Erro ao exportar CSV:", error);
+      console.error('Erro ao exportar CSV:', error);
     }
   };
+  
+  
+  
 
   return (
     <SafeAreaView style={styles.container}>
@@ -160,7 +183,7 @@ export default function ResultShoePage() {
           <View style={styles.buttonGroup}>
             <Pressable
                style={({ pressed }) => [styles.button, { opacity: pressed ? 0.8 : 1 }]}
-               onPress={() => router.push("/")}
+               onPress={() => router.back()}
             >
               <Text style={styles.buttonText}>Voltar ao Início</Text>
             </Pressable>
