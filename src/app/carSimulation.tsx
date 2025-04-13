@@ -358,19 +358,17 @@ export default function CarScreen() {
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Informações</Text>
-            <Text>
+            <Text style={{marginBottom: 20}}>   
               <Text style={{ fontWeight: 'bold' }}>Componentes Principais</Text>{"\n\n"}
 
               <Text style={{ fontWeight: 'bold' }}>Máquinas:</Text>{"\n"}
-              Injeção: 1 máquina.{"\n"}
-              Flamagem: 1 máquina.{"\n"}
-              Colagem: 1 máquina.{"\n\n"}
+              Injeção: 1.{"\n"}
+              Flamagem: 1.{"\n"}
+              Colagem: 1.{"\n\n"}
 
               <Text style={{ fontWeight: 'bold' }}>Operadores:</Text>{"\n"}
-              Acabamento e pesagem: 2 operadores.{"\n\n"}
-
-              <Text style={{ fontWeight: 'bold' }}>Estoques mínimo:</Text>{"\n"}
-                Flamagem: 50 peças.{"\n\n"}
+              Acabamento: 1.{"\n"}
+              Pesagem: 1.{"\n\n"}
 
               <Text style={{ fontWeight: 'bold' }}>Tempo de Processamento:</Text>{"\n"}
               Ajustável.{"\n\n"}
@@ -378,12 +376,9 @@ export default function CarScreen() {
               <Text style={{ fontWeight: 'bold' }}>Tempo de Setup (Preparo):</Text>{"\n"}
               Ajustável.{"\n\n"}
 
-              <Text style={{ fontWeight: 'bold' }}>Parâmetros de Entrada:</Text>{"\n"}
-              Estoque inicial, fixo, de 100 unidades.{"\n\n"}
-
               <Text style={{ fontWeight: 'bold' }}>Características do Processo:</Text>{"\n\n"}
 
-              <Text style={{ fontWeight: 'bold' }}>Injeção:</Text> Peças chegam no sistema, são processadas  e seguem para o acabamento.{"\n"}
+              <Text style={{ fontWeight: 'bold' }}>Injeção:</Text> Peças chegam no sistema, são processadas e seguem para o acabamento.{"\n"}
 
               <Text style={{ fontWeight: 'bold' }}>Acabamento:</Text> Feito por operadores.{"\n"}
 
@@ -410,7 +405,7 @@ export default function CarScreen() {
       <View style={styles.warningContainer}>
         <Text style={styles.warningText}>*O tempo da simulação é de 8 horas.</Text>
         <Text style={styles.warningText}>* Para alterar a configuração, pressione no elemento desejado.</Text>
-        <Text style={styles.warningText}>* A quantidade de estoque inicial é fixa.</Text>
+        <Text style={styles.warningText}>* A quantidade de estoque inicial é constante.</Text>
       </View>
     </SafeAreaView>
   );
